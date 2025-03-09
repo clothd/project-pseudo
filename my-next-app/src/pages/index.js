@@ -3,12 +3,12 @@ import TextInput from "@/components/TextInput";
 import ProgramOutput from "@/components/ProgramOutput";
 
 export default function Home() {
-  const [intent, setIntent] = useState("");
+  const [output, setOutput] = useState("");
 
   return (
     <div className="flex">
-      <TextInput onChange={setIntent} />
-      <ProgramOutput output={intent} />
+      <TextInput setOutput={setOutput} />
+      <ProgramOutput output={output} />
     </div>
   );
 }
