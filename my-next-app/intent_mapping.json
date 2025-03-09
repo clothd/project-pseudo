@@ -1,6 +1,5 @@
 {
-    "Buy Apple Stock": "def buy_apple_stock():\n    self.AddEquity(\"AAPL\", Resolution.Daily)\n    self.SetHoldings(\"AAPL\", 1.0)",
-    "Sell Tesla Stock": "def sell_tesla_stock():\n    self.Liquidate(\"TSLA\")",
-    "Short Google": "def short_google():\n    self.AddEquity(\"GOOGL\", Resolution.Daily)\n    self.SetHoldings(\"GOOGL\", -1.0)"
-  }
-  
+  "Buy Apple Stock": "def buy_apple_stock():\n    self.AddEquity(\"AAPL\", Resolution.Daily)\n    self.SetHoldings(\"AAPL\", 1.0)",
+  "Sell Tesla Stock": "def sell_tesla_stock():\n    self.Liquidate(\"TSLA\")",
+  "Short Google": "def short_google():\n    self.AddEquity(\"GOOGL\", Resolution.Daily)\n    self.SetHoldings(\"GOOGL\", -1.0)"
+}
