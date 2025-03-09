@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { FiMenu, FiX } from "react-icons/fi";
+
+// Dynamically import Preface to improve performance
+const Preface = dynamic(() => import("../components/Preface"), { ssr: false });
 
 const TextInput = ({ setOutput }) => {
   const [intent, setIntent] = useState("");
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     if (!intent.trim()) return;
@@ -20,14 +26,14 @@ const TextInput = ({ setOutput }) => {
 
           if (cmd === "if" || cmd === "elif") {
             indentLevel = 1;
-            pythonCode += `${cmd} condition_here:\n`; // Placeholder for condition
+            pythonCode += `${cmd} condition_here:\n`;
             lastWasCondition = true;
           } else if (cmd === "else") {
             indentLevel = 1;
             pythonCode += "else:\n";
             lastWasCondition = true;
           } else if (cmd === "then") {
-            continue; // 'then' is just a separator, no need to add it in Python syntax
+            continue;
           } else {
             const functionCode = data[cmd] || `# No match for: ${cmd}`;
             if (lastWasCondition) {
@@ -43,9 +49,27 @@ const TextInput = ({ setOutput }) => {
   }, [intent, setOutput]);
 
   return (
-    <div className="w-1/2 h-screen bg-black text-green-500 p-4">
+    <div className="relative w-1/2 h-screen bg-black text-green-500 p-4 flex">
+      {/* Menu Icon */}
+      <div className="w-1/20 flex items-start justify-start">
+        <button
+          className="text-green-500 text-2xl hover:text-green-300"
+          onClick={() => setShowMenu(!showMenu)}
+        >
+          <FiMenu />
+        </button>
+      </div>
+
+      {/* Preface Menu */}
+      {showMenu && (
+        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-90 flex items-center justify-center">
+          <Preface onClose={() => setShowMenu(false)} />
+        </div>
+      )}
+
+      {/* Text Input */}
       <textarea
-        className="w-full h-full bg-black text-green-500 border border-green-500 p-2 outline-none"
+        className="flex-grow h-full bg-black text-green-500 border border-green-500 p-2 outline-none"
         placeholder="Enter intents (e.g., 'if Buy Apple Stock then Short Google elif Sell Tesla Stock then Buy Nvidia else Short Amazon')..."
         onChange={(e) => setIntent(e.target.value)}
       />
