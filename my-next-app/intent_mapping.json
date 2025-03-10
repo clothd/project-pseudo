@@ -1,6 +1,7 @@
 {
-  "Buy {symbol}": "def buy_stock(symbol):\n    self.AddEquity(symbol, Resolution.Daily)\n    self.SetHoldings(symbol, 1.0)",
-  "Sell {symbol}": "def sell_stock(symbol):\n    self.Liquidate(symbol)",
-  "Short {symbol}": "def short_stock(symbol):\n    self.AddEquity(symbol, Resolution.Daily)\n    self.SetHoldings(symbol, -1.0)",
-  "Set Stop Loss {percentage}": "def set_stop_loss(symbol, percentage):\n    stop_price = self.Portfolio[symbol].Price * (1 - float(percentage)/100)\n    self.StopMarketOrder(symbol, -self.Portfolio[symbol].Quantity, stop_price)"
+  "Backtest dates {start_date} {end_date}": "self.SetStartDate({start_date})\nself.SetEndDate({end_date})",
+  "Set cash {cash}": "self.SetCash({cash})",
+  "Define symbol {symbol}": "self.{symbol} = self.AddEquity(\"{symbol}\", Resolution.Minute).Symbol",
+  "Set commission {commission}": "self.SetCommission(commission={commission})",
+  "Set leverage {leverage}": "self.SetLeverage({leverage})"
 }
