@@ -1,5 +1,6 @@
 {
-  "Buy Apple Stock": "def buy_apple_stock():\n    self.AddEquity(\"AAPL\", Resolution.Daily)\n    self.SetHoldings(\"AAPL\", 1.0)",
-  "Sell Tesla Stock": "def sell_tesla_stock():\n    self.Liquidate(\"TSLA\")",
-  "Short Google": "def short_google():\n    self.AddEquity(\"GOOGL\", Resolution.Daily)\n    self.SetHoldings(\"GOOGL\", -1.0)"
+  "Buy {symbol}": "def buy_stock(symbol):\n    self.AddEquity(symbol, Resolution.Daily)\n    self.SetHoldings(symbol, 1.0)",
+  "Sell {symbol}": "def sell_stock(symbol):\n    self.Liquidate(symbol)",
+  "Short {symbol}": "def short_stock(symbol):\n    self.AddEquity(symbol, Resolution.Daily)\n    self.SetHoldings(symbol, -1.0)",
+  "Set Stop Loss {percentage}": "def set_stop_loss(symbol, percentage):\n    stop_price = self.Portfolio[symbol].Price * (1 - float(percentage)/100)\n    self.StopMarketOrder(symbol, -self.Portfolio[symbol].Quantity, stop_price)"
 }

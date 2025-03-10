@@ -9,21 +9,41 @@ const TextInput = ({ setOutput }) => {
   const [intent, setIntent] = useState("");
   const [showMenu, setShowMenu] = useState(false);
 
+  const processIntent = (intent, patterns) => {
+    for (const [pattern, { template, params }] of Object.entries(patterns)) {
+      const regex = new RegExp(`^${pattern}$`, 'i');
+      const match = intent.match(regex);
+      
+      if (match) {
+        const values = match.slice(1).map(value => 
+          params.includes('symbol') ? value.toUpperCase() : value
+        );
+        let code = template;
+        params.forEach((param, index) => {
+          code = code.replace(new RegExp(param, 'g'), values[index]);
+        });
+        return code;
+      }
+    }
+    return `# No match for: ${intent}`;
+  };
+  
+  // In your useEffect:
   useEffect(() => {
     if (!intent.trim()) return;
-
+  
     fetch("/api/intents")
       .then((res) => res.json())
-      .then((data) => {
+      .then((patterns) => {
         const lines = intent.toLowerCase().split(/\s*(if|elif|else|then)\s*/);
         let pythonCode = "";
         let indentLevel = 0;
         let lastWasCondition = false;
-
+  
         for (let i = 0; i < lines.length; i++) {
           let cmd = lines[i].trim();
           if (!cmd) continue;
-
+  
           if (cmd === "if" || cmd === "elif") {
             indentLevel = 1;
             pythonCode += `${cmd} condition_here:\n`;
@@ -35,7 +55,7 @@ const TextInput = ({ setOutput }) => {
           } else if (cmd === "then") {
             continue;
           } else {
-            const functionCode = data[cmd] || `# No match for: ${cmd}`;
+            const functionCode = processIntent(cmd, patterns);
             if (lastWasCondition) {
               indentLevel = 2;
             }
@@ -43,7 +63,7 @@ const TextInput = ({ setOutput }) => {
             lastWasCondition = false;
           }
         }
-
+  
         setOutput(pythonCode.trim());
       });
   }, [intent, setOutput]);
