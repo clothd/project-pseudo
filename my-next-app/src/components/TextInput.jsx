@@ -12,7 +12,6 @@ const TextInput = ({ setOutput, onSave }) => {
   const [email, setEmail] = useState("");
   const [savedEmail, setSavedEmail] = useState("");
   const [password, setPassword] = useState("");
-  // New state for suggestions
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ top: 0, left: 0 });
@@ -361,8 +360,8 @@ const TextInput = ({ setOutput, onSave }) => {
         <div
           className="absolute bg-black border border-green-500 text-green-500 z-10 max-h-60 overflow-y-auto"
           style={{
-            top: `${cursorPosition.top+30}px`,
-            left: `${cursorPosition.left+120}px`,
+            top: `${cursorPosition.top + 30}px`,
+            left: `${cursorPosition.left + 120}px`,
             width: "300px",
           }}
         >
