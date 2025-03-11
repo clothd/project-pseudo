@@ -5,14 +5,13 @@ import { FiMenu, FiX, FiSave } from "react-icons/fi";
 // Dynamically import Preface to improve performance
 const Preface = dynamic(() => import("../components/Preface"), { ssr: false });
 
-const TextInput = ({ setOutput, output }) => {
+const TextInput = ({ setOutput, output, onSave }) => {
   const [intent, setIntent] = useState("");
   const [showMenu, setShowMenu] = useState(false);
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [email, setEmail] = useState("");
   const [savedEmail, setSavedEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     // Check if email exists in localStorage on component mount
@@ -22,52 +21,22 @@ const TextInput = ({ setOutput, output }) => {
     }
   }, []);
 
-  const saveData = async (userEmail, userPassword, userIntent) => {
-    try {
-      setIsSaving(true);
-      const response = await fetch("/api/saveData", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: userEmail,
-          password: userPassword,
-          input: userIntent,
-          output: output,
-        }),
-      });
-
-      const data = await response.json();
-      
-      if (response.ok) {
-        alert("Data saved successfully!");
-      } else {
-        alert(`Error: ${data.error || "Failed to save data"}`);
-      }
-    } catch (error) {
-      alert(`An error occurred: ${error.message}`);
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
   const handleSave = () => {
-    const storedEmail = localStorage.getItem("userEmail");  
+    const storedEmail = localStorage.getItem("userEmail");
     setShowEmailInput(true);
-  
-    if (storedEmail ) {
-      setSavedEmail(storedEmail);
-    } 
 
+    if (storedEmail) {
+      setSavedEmail(storedEmail);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (email.trim() && email.includes("@") && password.trim()) {
       localStorage.setItem("userEmail", email);
-      setSavedEmail(email);      
-      await saveData(email, password, intent);
+      setSavedEmail(email);
+      // Call the parent's onSave function instead of directly calling the API
+      onSave(email, password, intent);
       setShowEmailInput(false);
     } else {
       alert("Please enter a valid email address and password");
@@ -75,6 +44,7 @@ const TextInput = ({ setOutput, output }) => {
   };
 
   const processIntent = (intent, patterns) => {
+    // Your existing processIntent logic
     for (const [pattern, { template, params }] of Object.entries(patterns)) {
       const regex = new RegExp(`^${pattern}$`, "i");
       const match = intent.match(regex);
@@ -150,13 +120,12 @@ const TextInput = ({ setOutput, output }) => {
         <button
           className="text-green-500 text-2xl hover:text-green-300"
           onClick={handleSave}
-          disabled={isSaving}
           title={savedEmail ? `Save (${savedEmail})` : "Save"}
         >
           <FiSave />
         </button>
       </div>
-
+  
       {/* Email Input Popup */}
       {showEmailInput && (
         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-90 flex items-center justify-center z-50">
@@ -190,22 +159,21 @@ const TextInput = ({ setOutput, output }) => {
               <button
                 type="submit"
                 className="w-full p-2 bg-green-700 text-black hover:bg-green-600 transition-colors"
-                disabled={isSaving}
               >
-                {isSaving ? "Saving..." : "Submit"}
+                Submit
               </button>
             </form>
           </div>
         </div>
       )}
-
+  
       {/* Preface Menu */}
       {showMenu && (
         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-90 flex items-center justify-center">
           <Preface onClose={() => setShowMenu(false)} />
         </div>
       )}
-
+  
       {/* Text Input */}
       <textarea
         className="flex-grow h-full bg-black text-green-500 border border-green-500 p-2 outline-none ml-2"
