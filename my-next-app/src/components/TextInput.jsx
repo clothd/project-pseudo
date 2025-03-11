@@ -53,25 +53,20 @@ const TextInput = ({ setOutput, output }) => {
   };
 
   const handleSave = () => {
-    const storedEmail = localStorage.getItem("userEmail");
-    const storedPassword = localStorage.getItem("userPassword");
-    
-    if (storedEmail && storedPassword) {
+    const storedEmail = localStorage.getItem("userEmail");  
+    setShowEmailInput(true);
+  
+    if (storedEmail ) {
       setSavedEmail(storedEmail);
-      saveData(storedEmail, storedPassword, intent);
-    } else {
-      setShowEmailInput(true);
-    }
+    } 
+
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (email.trim() && email.includes("@") && password.trim()) {
       localStorage.setItem("userEmail", email);
-      localStorage.setItem("userPassword", password);
-      setSavedEmail(email);
-      
+      setSavedEmail(email);      
       await saveData(email, password, intent);
       setShowEmailInput(false);
     } else {
@@ -142,7 +137,6 @@ const TextInput = ({ setOutput, output }) => {
         setOutput(pythonCode.trim());
       });
   }, [intent, setOutput]);
-
   return (
     <div className="relative w-1/2 h-screen bg-black text-green-500 p-4 flex">
       {/* Menu and Save Icons */}
