@@ -19,5 +19,11 @@
   "Set fee model {fee}": "self.SetFeeModel(InteractiveBrokersFeeModel({fee}))",
   "Set portfolio construction {model}": "self.SetPortfolioConstruction(PortfolioConstructionModel.{model})",
   "Set risk management {model}": "self.SetRiskManagement(RiskManagementModel.{model})",
-  "Set execution {model}": "self.SetExecution(ExecutionModel.{model})"
+  "Set execution {model}": "self.SetExecution(ExecutionModel.{model})",
+  "Buy {symbol}": "self.SetHoldings(self.{symbol}, 1)",
+  "Buy {symbol} with allocation {allocation}": "self.SetHoldings(self.{symbol}, {allocation})",
+  "Sell {symbol}": "self.Liquidate(self.{symbol})",
+  "Sell {symbol} partially {percentage}": "self.SetHoldings(self.{symbol}, {percentage})",
+  "Short {symbol}": "self.SetHoldings(self.{symbol}, -1)",
+  "Buy back {symbol}": "self.SetHoldings(self.{symbol}, 1)"
 }

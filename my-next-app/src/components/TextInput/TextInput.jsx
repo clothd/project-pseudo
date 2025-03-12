@@ -100,8 +100,8 @@ const TextInput = ({ setOutput, onSave }) => {
 
   // Handle clicking on a suggestion
   const handleSuggestionClick = (suggestion) => {
+    console.log("Suggestion clicked:", suggestion);
     if (!textareaRef.current) return;
-
     const textarea = textareaRef.current;
     const text = textarea.value;
     const cursorPos = textarea.selectionStart;
