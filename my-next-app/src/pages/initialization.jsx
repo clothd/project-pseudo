@@ -1,5 +1,6 @@
 import { useState } from "react";
-import TextInput from "@/components/TextInput";
+// import TextInput from "@/components/TextInput";
+import TextInput from "../components/TextInput/index";
 import ProgramOutput from "@/components/ProgramOutput";
 
 export default function Home() {
