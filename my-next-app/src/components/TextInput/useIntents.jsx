@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 const useIntents = (intent, setOutput) => {
   const [availableIntents, setAvailableIntents] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
-
   useEffect(() => {
     // Fetch all available intents when component mounts
     fetch("/api/intents")

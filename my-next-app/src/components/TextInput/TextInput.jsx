@@ -5,6 +5,7 @@ import SuggestionBox from "./SuggestionBox";
 import EmailModal from "./EmailModal";
 import useIntents from "./useIntents";
 import { getCursorCoordinates } from "./text";
+import { useAuth } from "../../context/AuthContext";
 
 // Dynamically import Preface to improve performance
 const Preface = dynamic(() => import("../Preface"), { ssr: false });
@@ -20,24 +21,35 @@ const TextInput = ({ setOutput, onSave }) => {
   const [cursorPosition, setCursorPosition] = useState({ top: 0, left: 0 });
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
   const textareaRef = useRef(null);
+  const { user } = useAuth();
+  useEffect(() => {
+    if (user?.initialization?.input) {
+      setIntent(user.initialization.input);
+      if (user.initialization.output) {
+        setOutput(user.initialization.output);
+      }
+    }
+  }, [user, setOutput]);
 
   const { availableIntents, suggestions, setSuggestions, processIntentToCode } =
     useIntents(intent, setOutput);
-
   useEffect(() => {
     // Check if email exists in localStorage on component mount
-    const storedEmail = localStorage.getItem("userEmail");
+    const storedEmail = localStorage.getItem("email");
     if (storedEmail) {
       setSavedEmail(storedEmail);
     }
-  }, []);
-
+    // Initialize email from user data if available
+    if (user?.email) {
+      setSavedEmail(user.email);
+      setEmail(user.email);
+    }
+  }, [user]);
   const handleSave = () => {
     setShowEmailInput(true);
   };
 
   const handleSubmitCredentials = (userEmail, userPassword) => {
-    localStorage.setItem("userEmail", userEmail);
     setSavedEmail(userEmail);
     onSave(userEmail, userPassword, intent);
     setShowEmailInput(false);
@@ -46,11 +58,9 @@ const TextInput = ({ setOutput, onSave }) => {
   // Update suggestions based on current text and cursor position
   const updateSuggestions = () => {
     if (!textareaRef.current) return;
-
     const textarea = textareaRef.current;
     const text = textarea.value;
     const cursorPos = textarea.selectionStart;
-
     // Find the current word being typed
     let startPos = cursorPos;
     while (startPos > 0 && !/\s/.test(text.charAt(startPos - 1))) {

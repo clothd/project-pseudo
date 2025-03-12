@@ -1,12 +1,15 @@
 import { useState } from "react";
-// import TextInput from "@/components/TextInput";
 import TextInput from "../components/TextInput/index";
 import ProgramOutput from "@/components/ProgramOutput";
+import { useAuth } from "../context/AuthContext";
 
 export default function Home() {
   const [output, setOutput] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-
+  const { user } = useAuth();
+  if (user) {
+    localStorage.setItem("email", user.email);
+  }
   const saveData = async (email, password, intent) => {
     try {
       setIsSaving(true);
@@ -24,7 +27,7 @@ export default function Home() {
       });
 
       const data = await response.json();
-      
+
       if (response.ok) {
         alert("Data saved successfully!");
       } else {
@@ -39,11 +42,7 @@ export default function Home() {
 
   return (
     <div className="flex">
-      <TextInput 
-        setOutput={setOutput} 
-        output={output} 
-        onSave={saveData}
-      />
+      <TextInput setOutput={setOutput} output={output} onSave={saveData} />
       <ProgramOutput output={output} />
       {isSaving && <div>Saving...</div>}
     </div>

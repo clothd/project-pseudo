@@ -1,19 +1,24 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useRouter } from "next/router";
 import { FiX } from "react-icons/fi";
+import { useAuth } from "../context/AuthContext";
 
 const Preface = ({ onClose }) => {
   const router = useRouter();
+  const { setUser } = useAuth();
   const [selectedOption, setSelectedOption] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  useEffect(() => {
+    setEmail(localStorage.getItem("email") || "");
+  }, []);
 
   const handleLoadGame = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await fetch("/api/getUserData", {
         method: "POST",
@@ -22,12 +27,13 @@ const Preface = ({ onClose }) => {
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || "Failed to load data");
       }
-
-      console.log("User data:", data); // Handle user data (e.g., set state)
+      setUser(data);
+      onClose;
+      router.push("/initialization");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -103,16 +109,28 @@ const Preface = ({ onClose }) => {
         {/* New Strategy Options */}
         {selectedOption === "new" && (
           <div className="flex flex-col gap-2 mt-2">
-            <button onClick={() => router.push("/initialization")} className="px-4 py-2 border border-green-400 hover:bg-green-700 hover:text-black transition-all duration-200">
+            <button
+              onClick={() => router.push("/initialization")}
+              className="px-4 py-2 border border-green-400 hover:bg-green-700 hover:text-black transition-all duration-200"
+            >
               Initialization
             </button>
-            <button onClick={() => router.push("/buy")} className="px-4 py-2 border border-green-400 hover:bg-green-700 hover:text-black transition-all duration-200">
+            <button
+              onClick={() => router.push("/buy")}
+              className="px-4 py-2 border border-green-400 hover:bg-green-700 hover:text-black transition-all duration-200"
+            >
               Buy
             </button>
-            <button onClick={() => router.push("/sell")} className="px-4 py-2 border border-green-400 hover:bg-green-700 hover:text-black transition-all duration-200">
+            <button
+              onClick={() => router.push("/sell")}
+              className="px-4 py-2 border border-green-400 hover:bg-green-700 hover:text-black transition-all duration-200"
+            >
               Sell
             </button>
-            <button onClick={() => router.push("/buy_back")} className="px-4 py-2 border border-green-400 hover:bg-green-700 hover:text-black transition-all duration-200">
+            <button
+              onClick={() => router.push("/buy_back")}
+              className="px-4 py-2 border border-green-400 hover:bg-green-700 hover:text-black transition-all duration-200"
+            >
               Buy Back
             </button>
             <button
