@@ -3,5 +3,21 @@
   "Set cash {cash}": "self.SetCash({cash})",
   "Define symbol {symbol}": "self.{symbol} = self.AddEquity(\"{symbol}\", Resolution.Minute).Symbol",
   "Set commission {commission}": "self.SetCommission(commission={commission})",
-  "Set leverage {leverage}": "self.SetLeverage({leverage})"
+  "Set leverage {leverage}": "self.SetLeverage({leverage})",
+  "Set resolution {resolution}": "self.Resolution = Resolution.{resolution}",
+  "Set universe {universe}": "self.UniverseSettings.Resolution = Resolution.{universe}",
+  "Set universe selection {universe_selection}": "self.SetUniverseSelection({universe_selection})",
+  "Set alpha model {alpha_model}": "self.SetAlpha({alpha_model})",
+  "Set portfolio construction {portfolio_construction}": "self.SetPortfolioConstruction({portfolio_construction})",
+  "Define equity {symbol}": "self.{symbol} = self.AddEquity(\"{symbol}\", Resolution.Minute).Symbol",
+  "Define forex {pair}": "self.{pair} = self.AddForex(\"{pair}\", Resolution.Minute).Symbol",
+  "Define crypto {symbol}": "self.{symbol} = self.AddCrypto(\"{symbol}\", Resolution.Minute).Symbol",
+  "Set benchmark {benchmark}": "self.SetBenchmark(\"{benchmark}\")",
+  "Set brokerage model {brokerage}": "self.SetBrokerageModel(BrokerageName.{brokerage})",
+  "Set warmup {warmup}": "self.SetWarmup({warmup})",
+  "Set slippage {slippage}": "self.SetSlippageModel(ConstantSlippageModel({slippage}))",
+  "Set fee model {fee}": "self.SetFeeModel(InteractiveBrokersFeeModel({fee}))",
+  "Set portfolio construction {model}": "self.SetPortfolioConstruction(PortfolioConstructionModel.{model})",
+  "Set risk management {model}": "self.SetRiskManagement(RiskManagementModel.{model})",
+  "Set execution {model}": "self.SetExecution(ExecutionModel.{model})"
 }
